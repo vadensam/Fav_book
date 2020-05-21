@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            *{
+                box-sizing: border-box;
+                vertical-align: top;
+            }
+            #hold{
+                width: 95%;
+                padding: 5%;
+            }
+            header{
+                width: 100%;
+            }
+            header h1, a{
+                width: fit-content;
+                display: inline-block;
+            }
+            header h1{
+                margin-right: 60%;
+            }
+            #container{
+                width: 100%;
+
+            }
+            form{
+                width: 50%;
+                display: inline-block;
+            }
+            form input{
+                width: 40%;
+                height: 40px;
+            }
+            #description{
+                height: 80px;
+            }
+            #books{
+                width: 40%;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="hold">
+            <header>
+                <h1>Welcome {{user.fname}}</h1>
+                <a href="/logout">Log out</a>
+            </header>
+            <div id="container">
+                <form action="/add_book" method="POST">
+                    {% csrf_token %}
+                    <h1>Add a Favorite Book</h1>
+                    <label for="title">Title</label><br>
+                    <input type='text' name="title" id="title"><br>
+                    <label for="description">Description</label><br>
+                    <input type='text' name="desc" id="description"><br>
+                    <button>Add</button>
+                    <br><br>
+                    <div id="error">
+                            {% if messages %}
+                        <ul class="messages">    
+                            {% for message in messages %}    
+                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </form>
+                <div id="books">
+                    <h1>All Books</h1>
+
+                {% for book in all_books%}
+                    <h2><a href="/books/{{book.id}}">{{book.title}}</a></h2>
+                    <p>(Added by {{book.user.fname}}, {{book.user.lname}})</p>
+                    {% if book in user.fav_books.all %}
+                        <p>This is on of your favorites</p>
+                        
+                    {% else %}
+                        <a href="/add_fav/{{book.id}}">Add to Favorites</a>
+                        {% endif %}
+                {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>

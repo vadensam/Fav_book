@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Display</title>
+        <style>
+            *{
+                box-sizing: border-box;
+                vertical-align: top;
+            }
+            #container{
+                width: 95%;
+                padding: 5%;
+            }
+            header{
+                width: 100%;
+            }
+            header h1, a{
+                width: fit-content;
+                display: inline-block;
+            }
+            header h1{
+                margin-right: 60%;
+            }
+            #ul, #info{
+                width: 45%;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+
+            <header>
+                <h1>Welcome {{user.fname}}</h1>
+                <a href="/logout">Log out</a> |
+                <a href="/success">Home</a>
+            </header>
+
+            <div id="info">
+                <h1>{{ book.title }}"</h1>
+                <p>Added by: {{book.user.fname}}, {{book.user.lname}}</p>
+                <p>Added on: {{ book.created_at}}</p>
+                <p>Last updated at: {{ book.updated_at}}</p>
+                <p>Description: {{ book.desc }}"</p>
+                <br><br>
+                {% if book not in user.fav_books.all%}
+                <a href="/add_fav/{{book.id}}">Add to Favorites</a>
+                {% endif %}
+            </div>
+            <div id="ul">
+                <h1>Users who like this Book</h1>
+                <ul>
+                    {% for person in book.fav_users.all %}
+                        {% if person.id == user.id%}
+                    <li>{{ person.fname}}, {{ person.lname}} <a href="/unfav/{{book.id}}">UnFav</a></li>
+                        {% else%}
+                    <li>{{ person.fname}}, {{ person.lname}}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </body>
+</html>
